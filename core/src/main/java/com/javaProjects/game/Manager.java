@@ -130,14 +130,18 @@ public class Manager extends ApplicationAdapter {
             camera.position.x += cameraSpd;
         }
 
+        //Limiting the camera movement
         if(camera.position.y + (cameraH * 1.15) > cameraH){
-            System.out.println("cam Y: " + camera.position.y);
             camera.position.y = camera.position.y - cameraSpd;
         }
 
         if(camera.position.x + (cameraW * 1.15) > cameraW){
-            System.out.println("cam X: " + camera.position.x);
             camera.position.x = camera.position.x - cameraSpd;
+        }
+
+        if(camera.position.x - (cameraH * 1.15) < -cameraW){
+            System.out.println(camera.position.x);
+            camera.position.x = camera.position.x + cameraSpd;
         }
 
         Gdx.gl.glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
