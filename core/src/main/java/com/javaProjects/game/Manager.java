@@ -9,6 +9,7 @@ import java.util.List;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,12 +18,18 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Manager extends ApplicationAdapter {
 
     public OrthographicCamera camera;
+    public int cameraW, cameraH;
+    public int cameraSpd = 5;
+
+    public int maxW = 1920, maxH = 1080;
 
     public Sprite catSprite;
     public Texture catTexture;
@@ -42,12 +49,32 @@ public class Manager extends ApplicationAdapter {
     //Tile variables
     private int tileSize = 32;
     private int gridWidth = 20;
-    private int gridHeight = 10;
+    private int gridHeight = 11;
  
     private Texture tileTexture;
 
+    Viewport viewport;
+
     @Override
     public void create() {
+
+
+        //Configuring camera and viewport for the application
+        cameraW = 1920;
+        cameraH = 1080;       
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, cameraW, cameraH);
+
+        viewport = new FitViewport(cameraW, cameraH, camera);
+
+        viewport.apply();
+
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        camera.position.set(0f, 0f, 0f);
+        
+        camera.update();
+
 
         //Putting all the textures/sprites inside of the textures array
         try {
@@ -70,6 +97,7 @@ public class Manager extends ApplicationAdapter {
 
         System.out.println(textures);
 
+        //Defining some textures for testing
         defaultTexture = new Texture(Gdx.files.internal("assets/white.jpg"));
         tileTexture = textures.get(0);
 
@@ -80,11 +108,6 @@ public class Manager extends ApplicationAdapter {
         catSprite.setPosition(0f, 0f);
         catSprite.setSize(50f, 50f);
 
-        camera = new OrthographicCamera(900, 720);
-
-        camera.position.set(-10f, -10f, 0f);
-        camera.update();
-
     }
 
     @Override
@@ -92,6 +115,32 @@ public class Manager extends ApplicationAdapter {
         camera.update();
         spriteBatch.setProjectionMatrix(camera.combined);
 
+
+
+        if(Gdx.input.isKeyPressed(Input.Keys.W)){
+            camera.position.y += cameraSpd;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.S)){
+            camera.position.y -= cameraSpd;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.A)){
+            camera.position.x -= cameraSpd;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.D)){
+            camera.position.x += cameraSpd;
+        }
+
+        if(camera.position.y + (cameraH * 1.15) > cameraH){
+            System.out.println("cam Y: " + camera.position.y);
+            camera.position.y = camera.position.y - cameraSpd;
+        }
+
+        if(camera.position.x + (cameraW * 1.15) > cameraW){
+            System.out.println("cam X: " + camera.position.x);
+            camera.position.x = camera.position.x - cameraSpd;
+        }
+
+        Gdx.gl.glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Changes the texture from the sprite (improve later)
@@ -104,12 +153,12 @@ public class Manager extends ApplicationAdapter {
 
         spriteBatch.begin();
 
-        for(int x = 0; x < gridWidth; x++){
-            for(int y = 0; y < gridHeight; y++){
+        for(int x = (int) (0 - (maxW/tileSize)); x < gridWidth; x++){
+            for(int y = (int) (0 - (maxH/tileSize)); y < gridHeight; y++){
                 spriteBatch.draw(textures.get(0), x * tileSize, y * tileSize, tileSize, tileSize);
             }
         }
-        
+                
         
         catSprite.draw(spriteBatch);
 
@@ -118,7 +167,9 @@ public class Manager extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
-       
+        if (viewport != null) {
+            viewport.update(width, height, true);
+        }
     }
 
     @Override
