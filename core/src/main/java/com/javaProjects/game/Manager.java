@@ -63,16 +63,11 @@ public class Manager extends ApplicationAdapter {
         cameraW = 1920;
         cameraH = 1080;       
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, cameraW, cameraH);
+        camera = new OrthographicCamera();  
 
         viewport = new FitViewport(cameraW, cameraH, camera);
 
-        viewport.apply();
-
-        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-        camera.position.set(0f, 0f, 0f);
-        
+        camera.position.set(cameraW/2f, cameraH/2f, 0f);
         camera.update();
 
 
@@ -106,46 +101,42 @@ public class Manager extends ApplicationAdapter {
         catSprite = new Sprite(defaultTexture);
 
         catSprite.setPosition(0f, 0f);
+        
         catSprite.setSize(50f, 50f);
 
     }
 
     @Override
     public void render() {
-        camera.update();
+        
         spriteBatch.setProjectionMatrix(camera.combined);
 
+        Gdx.gl.glClearColor(0, 0, 0, 1.0f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-        if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            camera.position.y += cameraSpd;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            camera.position.y -= cameraSpd;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            camera.position.x -= cameraSpd;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            camera.position.x += cameraSpd;
-        }
+        //Camera Movement
+        if(Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += cameraSpd;
+        if(Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= cameraSpd;
+        if(Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= cameraSpd;
+        if(Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += cameraSpd;
 
         //Limiting the camera movement
-        if(camera.position.y + (cameraH * 1.15) > cameraH){
-            camera.position.y = camera.position.y - cameraSpd;
-        }
+        if(camera.position.y + (cameraH * 1.15) > cameraH) camera.position.y = camera.position.y - cameraSpd;
 
-        if(camera.position.x + (cameraW * 1.15) > cameraW){
-            camera.position.x = camera.position.x - cameraSpd;
-        }
+        if(camera.position.y + (cameraH/2) < 0) camera.position.y = camera.position.y + cameraSpd;
 
-        if(camera.position.x - (cameraH * 1.15) < -cameraW){
-            System.out.println(camera.position.x);
-            camera.position.x = camera.position.x + cameraSpd;
-        }
+        if(camera.position.x + (cameraW * 1.15) > cameraW)  camera.position.x = camera.position.x - cameraSpd;
+        
+        if(camera.position.x - (cameraW * 0.47) < -cameraW) camera.position.x = camera.position.x + cameraSpd;
 
-        Gdx.gl.glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        //Fullscreen
+        if(Gdx.input.isKeyJustPressed(Input.Keys.B)){
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        }
 
         //Changes the texture from the sprite (improve later)
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)){
@@ -167,13 +158,18 @@ public class Manager extends ApplicationAdapter {
         catSprite.draw(spriteBatch);
 
         spriteBatch.end();
+
+        camera.update();
+
     }
 
     @Override
     public void resize(int width, int height) {
         if (viewport != null) {
-            viewport.update(width, height, true);
+            viewport.update(width, height, false);
         }
+
+        camera.position.set(cameraW/2f, cameraH/2f, 0f);
     }
 
     @Override
