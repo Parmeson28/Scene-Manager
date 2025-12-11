@@ -48,6 +48,8 @@ public class Manager extends ApplicationAdapter {
     public void create() {
 
         camera.cameraConfig();
+
+        spriteBatch = new SpriteBatch();
         
     }
 

@@ -36,7 +36,7 @@ public class TileGrid {
                 selection = folder.split(" ");
 
                 if(selection[0].equals("tilesFolder")){
-                    Texture t = new Texture("assets/tilesFolder/" + line);
+                    Texture t = new Texture("assets/" + line);
                     tilesTextures.add(t);
                 }
                 
