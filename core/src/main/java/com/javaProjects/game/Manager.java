@@ -49,6 +49,7 @@ public class Manager extends ApplicationAdapter {
 
     //Handling mouse click variables
     private Vector2 touchPoint = new Vector2();
+    public Vector2 selectedTile = new Vector2();
 
 
     //Changing texture variables
@@ -68,7 +69,7 @@ public class Manager extends ApplicationAdapter {
         spriteBatch.begin();
 
         
-        tileGrid.renderTiles(spriteBatch);
+        tileGrid.renderTiles(spriteBatch, selectedTile);
         
 
         spriteBatch.end();
@@ -89,16 +90,20 @@ public class Manager extends ApplicationAdapter {
 
 
         //Handling mouse clicks (getting the point where it is clicked)
-        if(Gdx.input.isButtonJustPressed(0))    touchPoint = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+        if(Gdx.input.isButtonJustPressed(0)){
+            Vector3 touchPos = new Vector3();
+            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.camera.unproject(touchPos);
+            
+            touchPoint = new Vector2(touchPos.x, touchPos.y);
+        }   
 
         for(Vector2 v:tileGrid.tilesInfo){
             tileRec.set(v.x, v.y, 32, 32);
             
             if(tileRec.contains(touchPoint)){
-                System.out.println("tp " + touchPoint);
-                System.out.println("x, v" + v.x + v.y); 
+                selectedTile = new Vector2(v.x, v.y);            
             }
-
         }
 
         tileGrid.tilesInfo.clear();
@@ -107,7 +112,7 @@ public class Manager extends ApplicationAdapter {
         spriteBatch.begin();
 
         
-        tileGrid.renderTiles(spriteBatch);
+        tileGrid.renderTiles(spriteBatch, selectedTile);
         
 
         spriteBatch.end();

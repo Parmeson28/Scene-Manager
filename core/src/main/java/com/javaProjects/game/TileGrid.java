@@ -57,11 +57,17 @@ public class TileGrid {
 
     }
 
-    public void renderTiles(SpriteBatch spriteBatch){
+    public void renderTiles(SpriteBatch spriteBatch, Vector2 chosenTile){
 
         for(int x = (int) (0 - (camera.cameraW/tileSize)); x < gridWidth; x++){
             for(int y = (int) (0 - (camera.cameraH/tileSize)); y < gridHeight; y++){
-                spriteBatch.draw(tilesTextures.get(0), x * tileSize, y * tileSize, tileSize, tileSize);
+                
+                if(chosenTile.x == x * tileSize && chosenTile.y == y * tileSize){
+                    spriteBatch.draw(tilesTextures.get(1), x * tileSize, y * tileSize, tileSize, tileSize);
+                }else{
+                    spriteBatch.draw(tilesTextures.get(0), x * tileSize, y * tileSize, tileSize, tileSize);
+                }
+                
 
                 tilesPositions = new Vector2((float) x * tileSize, (float) y * tileSize);
                 tilesInfo.add(tilesPositions);
