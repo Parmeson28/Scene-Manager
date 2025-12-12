@@ -3,9 +3,12 @@ package com.javaProjects.game;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Vector;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
 public class TileGrid {
@@ -13,7 +16,7 @@ public class TileGrid {
     private CameraHandle camera = new CameraHandle();
 
 
-    private int tileSize = 32;
+    public int tileSize = 32;
     private int gridWidth = 20;
     private int gridHeight = 11;
  
@@ -23,8 +26,11 @@ public class TileGrid {
 
     private String folder;
     private String[] selection;
+
+    private Vector2 tilesPositions = new Vector2();
+    public Array<Vector2> tilesInfo = new Array<>();
     
-    private void takeTileTextures(){
+    public void takeTileTextures(){
         try {
 
             br = new BufferedReader(new FileReader("assets/assets.txt"));
@@ -53,13 +59,17 @@ public class TileGrid {
 
     public void renderTiles(SpriteBatch spriteBatch){
 
-        takeTileTextures();
-
-        for(int x = (int) (0 - (camera.maxW/tileSize)); x < gridWidth; x++){
-            for(int y = (int) (0 - (camera.maxH/tileSize)); y < gridHeight; y++){
+        for(int x = (int) (0 - (camera.cameraW/tileSize)); x < gridWidth; x++){
+            for(int y = (int) (0 - (camera.cameraH/tileSize)); y < gridHeight; y++){
                 spriteBatch.draw(tilesTextures.get(0), x * tileSize, y * tileSize, tileSize, tileSize);
+
+                tilesPositions = new Vector2((float) x * tileSize, (float) y * tileSize);
+                tilesInfo.add(tilesPositions);
+
             }
         }
+    
+  
     }
     
 

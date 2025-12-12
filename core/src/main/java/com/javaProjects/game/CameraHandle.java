@@ -16,10 +16,7 @@ public class CameraHandle {
     public int cameraW = 1920, cameraH = 1080;
     public int cameraSpd = 5;
 
-    public int maxW = 1920, maxH = 1080;
-
     Viewport viewport;
-
 
     //Put this inside Create()
     public void cameraConfig(){ 
