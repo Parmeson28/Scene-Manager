@@ -102,7 +102,8 @@ public class Manager extends ApplicationAdapter {
             tileRec.set(v.x, v.y, 32, 32);
             
             if(tileRec.contains(touchPoint)){
-                selectedTile = new Vector2(v.x, v.y);            
+                selectedTile = new Vector2(v.x, v.y);
+                
             }
         }
 

@@ -30,6 +30,8 @@ public class TileGrid {
     private Vector2 tilesPositions = new Vector2();
     public Array<Vector2> tilesInfo = new Array<>();
     
+    public Array<Vector2> selectedTiles = new Array<>();
+    
     public void takeTileTextures(){
         try {
 
@@ -58,19 +60,25 @@ public class TileGrid {
     }
 
     public void renderTiles(SpriteBatch spriteBatch, Vector2 chosenTile){
+        
+        selectedTiles.add(chosenTile);
 
         for(int x = (int) (0 - (camera.cameraW/tileSize)); x < gridWidth; x++){
             for(int y = (int) (0 - (camera.cameraH/tileSize)); y < gridHeight; y++){
                 
-                if(chosenTile.x == x * tileSize && chosenTile.y == y * tileSize){
+                
+                tilesPositions = new Vector2((float) x * tileSize, (float) y * tileSize);
+                tilesInfo.add(tilesPositions);
+
+
+                if(selectedTiles.contains(tilesPositions, false)){
                     spriteBatch.draw(tilesTextures.get(1), x * tileSize, y * tileSize, tileSize, tileSize);
                 }else{
                     spriteBatch.draw(tilesTextures.get(0), x * tileSize, y * tileSize, tileSize, tileSize);
                 }
                 
 
-                tilesPositions = new Vector2((float) x * tileSize, (float) y * tileSize);
-                tilesInfo.add(tilesPositions);
+                
 
             }
         }
