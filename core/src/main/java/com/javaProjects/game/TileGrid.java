@@ -3,12 +3,10 @@ package com.javaProjects.game;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Vector;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
 public class TileGrid {
@@ -60,12 +58,15 @@ public class TileGrid {
     }
 
     public void renderTiles(SpriteBatch spriteBatch, Vector2 chosenTile){
+
         
-        selectedTiles.add(chosenTile);
+        if(!selectedTiles.contains(chosenTile, false)){
+            selectedTiles.add(chosenTile);
+            System.out.println(selectedTiles);
+        }
 
         for(int x = (int) (0 - (camera.cameraW/tileSize)); x < gridWidth; x++){
             for(int y = (int) (0 - (camera.cameraH/tileSize)); y < gridHeight; y++){
-                
                 
                 tilesPositions = new Vector2((float) x * tileSize, (float) y * tileSize);
                 tilesInfo.add(tilesPositions);

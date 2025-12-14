@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -33,9 +31,6 @@ public class CameraHandle {
     public void cameraMovement(SpriteBatch spriteBatch){
 
         spriteBatch.setProjectionMatrix(camera.combined);
-
-        Gdx.gl.glClearColor(0, 0, 0, 1.0f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     
         //Camera Movement
         if(Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += cameraSpd;

@@ -1,28 +1,24 @@
 package com.javaProjects.game;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.List;
-import java.util.Vector;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Graphics.DisplayMode;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -34,7 +30,6 @@ public class Manager extends ApplicationAdapter {
 
     public Sprite catSprite;
     public Texture catTexture;
-
 
     //Exclusive variables for the level editore
 
@@ -56,6 +51,13 @@ public class Manager extends ApplicationAdapter {
     public Rectangle tileRec = new Rectangle();
 
 
+    
+    //UI Variables
+    private Skin skin;
+    private Stage stage;
+
+
+
     @Override
     public void create() {
 
@@ -73,12 +75,32 @@ public class Manager extends ApplicationAdapter {
         
 
         spriteBatch.end();
+
+
+        //UI CODE
+        skin = new Skin(Gdx.files.internal("assets/metalui/metal-ui.json"));
+
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+
+        Table root = new Table();
+        root.setFillParent(true);
+        stage.addActor(root);
+
+        TextButton textButton = new TextButton("Hello", skin);
+        textButton.setPosition(stage.getWidth()/2, stage.getHeight()/2, Align.center);
+        
+        root.add(textButton);
+
     }
 
     @Override
     public void render() {
         
         camera.cameraMovement(spriteBatch);
+
+        Gdx.gl.glClearColor(0, 0, 0, 1.0f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Fullscreen
         if(Gdx.input.isKeyJustPressed(Input.Keys.B)){
@@ -118,6 +140,8 @@ public class Manager extends ApplicationAdapter {
 
         spriteBatch.end();
 
+        stage.act();
+        stage.draw();
 
 
     }
