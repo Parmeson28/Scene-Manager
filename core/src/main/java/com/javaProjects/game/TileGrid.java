@@ -57,12 +57,18 @@ public class TileGrid {
 
     }
 
-    public void renderTiles(SpriteBatch spriteBatch, Vector2 chosenTile){
-
+    public void renderTiles(SpriteBatch spriteBatch, Vector2 chosenTile, Vector2 deleteTile){
         
         if(!selectedTiles.contains(chosenTile, false)){
             selectedTiles.add(chosenTile);
-            System.out.println(selectedTiles);
+
+        }else{
+            for(int x = 0; x < selectedTiles.size; x++){
+
+                if(selectedTiles.get(x).x == deleteTile.x && selectedTiles.get(x).y == deleteTile.y)
+                    selectedTiles.removeIndex(x);
+
+            }
         }
 
         for(int x = (int) (0 - (camera.cameraW/tileSize)); x < gridWidth; x++){
@@ -78,9 +84,6 @@ public class TileGrid {
                     spriteBatch.draw(tilesTextures.get(0), x * tileSize, y * tileSize, tileSize, tileSize);
                 }
                 
-
-                
-
             }
         }
     

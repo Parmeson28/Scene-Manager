@@ -2,13 +2,16 @@ package com.javaProjects.game;
 
 import java.io.BufferedReader;
 
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -16,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -44,6 +49,7 @@ public class Manager extends ApplicationAdapter {
 
     //Handling mouse click variables
     private Vector2 touchPoint = new Vector2();
+    private Vector2 deleteTouchPoint = new Vector2();
     public Vector2 selectedTile = new Vector2();
 
 
@@ -71,21 +77,20 @@ public class Manager extends ApplicationAdapter {
         spriteBatch.begin();
 
         
-        tileGrid.renderTiles(spriteBatch, selectedTile);
+        tileGrid.renderTiles(spriteBatch, selectedTile, deleteTouchPoint);
         
 
         spriteBatch.end();
 
-
         //UI CODE
-        skin = new Skin(Gdx.files.internal("assets/metalui/metal-ui.json"));
-
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
         Table root = new Table();
         root.setFillParent(true);
         stage.addActor(root);
+
+        skin = new Skin(Gdx.files.internal("assets/metalui/metal-ui.json"));
 
         TextButton textButton = new TextButton("Hello", skin);
         textButton.setPosition(stage.getWidth()/2, stage.getHeight()/2, Align.center);
@@ -118,14 +123,25 @@ public class Manager extends ApplicationAdapter {
             camera.camera.unproject(touchPos);
             
             touchPoint = new Vector2(touchPos.x, touchPos.y);
+
+            System.out.println(touchPoint);
         }   
+
+
+        if(Gdx.input.isButtonJustPressed(1)){
+            Vector3 deleteTouchPos = new Vector3();
+            deleteTouchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.camera.unproject(deleteTouchPos);
+
+            deleteTouchPoint = new Vector2(deleteTouchPos.x, deleteTouchPos.y);
+            System.out.println(deleteTouchPoint);
+        }
 
         for(Vector2 v:tileGrid.tilesInfo){
             tileRec.set(v.x, v.y, 32, 32);
             
             if(tileRec.contains(touchPoint)){
                 selectedTile = new Vector2(v.x, v.y);
-                
             }
         }
 
@@ -135,14 +151,13 @@ public class Manager extends ApplicationAdapter {
         spriteBatch.begin();
 
         
-        tileGrid.renderTiles(spriteBatch, selectedTile);
+        tileGrid.renderTiles(spriteBatch, selectedTile, deleteTouchPoint);
         
 
         spriteBatch.end();
 
         stage.act();
         stage.draw();
-
 
     }
 
