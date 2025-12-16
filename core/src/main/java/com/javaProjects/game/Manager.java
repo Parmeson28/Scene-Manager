@@ -51,6 +51,7 @@ public class Manager extends ApplicationAdapter {
     private Vector2 touchPoint = new Vector2();
     private Vector2 deleteTouchPoint = new Vector2();
     public Vector2 selectedTile = new Vector2();
+    public Vector2 deleteSelectedTile = new Vector2();
 
 
     //Changing texture variables
@@ -73,14 +74,6 @@ public class Manager extends ApplicationAdapter {
 
         spriteBatch = new SpriteBatch();
         
-
-        spriteBatch.begin();
-
-        
-        tileGrid.renderTiles(spriteBatch, selectedTile, deleteTouchPoint);
-        
-
-        spriteBatch.end();
 
         //UI CODE
         stage = new Stage(new ScreenViewport());
@@ -115,6 +108,13 @@ public class Manager extends ApplicationAdapter {
             Gdx.graphics.setWindowedMode(camera.cameraW, camera.cameraH);
         }
 
+        spriteBatch.begin();
+
+        
+        tileGrid.renderTiles(spriteBatch, selectedTile, deleteSelectedTile);
+        
+
+        spriteBatch.end();
 
         //Handling mouse clicks (getting the point where it is clicked)
         if(Gdx.input.isButtonJustPressed(0)){
@@ -134,7 +134,6 @@ public class Manager extends ApplicationAdapter {
             camera.camera.unproject(deleteTouchPos);
 
             deleteTouchPoint = new Vector2(deleteTouchPos.x, deleteTouchPos.y);
-            System.out.println(deleteTouchPoint);
         }
 
         for(Vector2 v:tileGrid.tilesInfo){
@@ -143,18 +142,12 @@ public class Manager extends ApplicationAdapter {
             if(tileRec.contains(touchPoint)){
                 selectedTile = new Vector2(v.x, v.y);
             }
+            if(tileRec.contains(deleteTouchPoint)){
+                deleteSelectedTile = new Vector2(v.x, v.y);
+            }
         }
 
         tileGrid.tilesInfo.clear();
-
-
-        spriteBatch.begin();
-
-        
-        tileGrid.renderTiles(spriteBatch, selectedTile, deleteTouchPoint);
-        
-
-        spriteBatch.end();
 
         stage.act();
         stage.draw();

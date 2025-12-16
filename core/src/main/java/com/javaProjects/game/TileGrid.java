@@ -61,13 +61,13 @@ public class TileGrid {
         
         if(!selectedTiles.contains(chosenTile, false)){
             selectedTiles.add(chosenTile);
-
+        
         }else{
             for(int x = 0; x < selectedTiles.size; x++){
-
-                if(selectedTiles.get(x).x == deleteTile.x && selectedTiles.get(x).y == deleteTile.y)
+                if(selectedTiles.get(x).x == deleteTile.x && selectedTiles.get(x).y == deleteTile.y){
                     selectedTiles.removeIndex(x);
-
+                    System.out.println("Removido");
+                }
             }
         }
 
