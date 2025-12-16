@@ -116,6 +116,12 @@ public class Manager extends ApplicationAdapter {
 
         spriteBatch.end();
 
+
+        //Probably not the best practice but solves the problem
+        touchPoint.set(-1000f, -1000f);
+        deleteTouchPoint.set(1000f, 1000f);
+        
+
         //Handling mouse clicks (getting the point where it is clicked)
         if(Gdx.input.isButtonJustPressed(0)){
             Vector3 touchPos = new Vector3();
