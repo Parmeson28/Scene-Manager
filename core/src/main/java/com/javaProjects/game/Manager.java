@@ -2,16 +2,13 @@ package com.javaProjects.game;
 
 import java.io.BufferedReader;
 
-
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -19,8 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -126,18 +121,18 @@ public class Manager extends ApplicationAdapter {
         if(Gdx.input.isButtonJustPressed(0)){
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.camera.unproject(touchPos);
+            camera.viewport.unproject(touchPos);
             
             touchPoint = new Vector2(touchPos.x, touchPos.y);
 
             System.out.println(touchPoint);
-        }   
+        }
 
 
         if(Gdx.input.isButtonJustPressed(1)){
             Vector3 deleteTouchPos = new Vector3();
             deleteTouchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.camera.unproject(deleteTouchPos);
+            camera.viewport.unproject(deleteTouchPos);
 
             deleteTouchPoint = new Vector2(deleteTouchPos.x, deleteTouchPos.y);
         }
@@ -152,7 +147,7 @@ public class Manager extends ApplicationAdapter {
                 deleteSelectedTile = new Vector2(v.x, v.y);
             }
         }
-
+        
         tileGrid.tilesInfo.clear();
 
         stage.act();

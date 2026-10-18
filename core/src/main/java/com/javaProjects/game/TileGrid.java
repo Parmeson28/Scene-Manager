@@ -15,8 +15,8 @@ public class TileGrid {
 
 
     public int tileSize = 32;
-    private int gridWidth = 20;
-    private int gridHeight = 11;
+    private int gridWidth = 32;
+    private int gridHeight = 32;
  
     private Array<Texture> tilesTextures = new Array<>();
 
