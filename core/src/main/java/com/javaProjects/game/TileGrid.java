@@ -3,20 +3,22 @@ package com.javaProjects.game;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class TileGrid {
 
-    private CameraHandle camera = new CameraHandle();
+    private final CameraHandle camera = new CameraHandle();
 
 
-    public int tileSize = 32;
-    private int gridWidth = 32;
-    private int gridHeight = 32;
+    public  final int tileSize = 32;
+    private final int gridWidth = 32;
+    private final int gridHeight = 32;
  
     private Array<Texture> tilesTextures = new Array<>();
 
@@ -25,10 +27,8 @@ public class TileGrid {
     private String folder;
     private String[] selection;
 
-    private Vector2 tilesPositions = new Vector2();
-    public Array<Vector2> tilesInfo = new Array<>();
-    
-    public Array<Vector2> selectedTiles = new Array<>();
+    private HashMap<Vector2, Integer> placedTiles = new HashMap<>();
+    private final Vector2 tmp = new Vector2();
     
     public void takeTileTextures(){
         try {
@@ -52,45 +52,35 @@ public class TileGrid {
         } catch (IOException e) {
 
             e.printStackTrace();
-
         }
-
     }
 
-    public void renderTiles(SpriteBatch spriteBatch, Vector2 chosenTile, Vector2 deleteTile){
-        
-        if(!selectedTiles.contains(chosenTile, false)){
-            selectedTiles.add(chosenTile);
-        
-        }else{
-            for(int x = 0; x < selectedTiles.size; x++){
-                if(selectedTiles.get(x).x == deleteTile.x && selectedTiles.get(x).y == deleteTile.y){
-                    selectedTiles.removeIndex(x);
-                    System.out.println("Removido");
-                }
+    private Vector2 snap(Vector2 world){
+        return new Vector2(
+            MathUtils.floor(world.x / tileSize) * tileSize,
+            MathUtils.floor(world.y / tileSize) * tileSize
+        );
+    }
+
+    public void placeTile(Vector2 world, int textureIndex){
+        placedTiles.put(snap(world), textureIndex);
+    }
+
+    public void removeTile(Vector2 world) {
+        placedTiles.remove(snap(world));
+    }
+
+    public void renderTiles(SpriteBatch spriteBatch) {
+        for (int x = -(camera.cameraW / tileSize); x < gridWidth; x++) {
+            for (int y = -(camera.cameraH / tileSize); y < gridHeight; y++) {
+                tmp.set(x * tileSize, y * tileSize);
+                Integer idx = placedTiles.get(tmp);
+                Texture t = tilesTextures.get(idx != null ? idx : 0);
+                spriteBatch.draw(t, x * tileSize, y * tileSize, tileSize, tileSize);
             }
         }
-
-        for(int x = (int) (0 - (camera.cameraW/tileSize)); x < gridWidth; x++){
-            for(int y = (int) (0 - (camera.cameraH/tileSize)); y < gridHeight; y++){
-                
-                tilesPositions = new Vector2((float) x * tileSize, (float) y * tileSize);
-                tilesInfo.add(tilesPositions);
-
-
-                if(selectedTiles.contains(tilesPositions, false)){
-                    spriteBatch.draw(tilesTextures.get(1), x * tileSize, y * tileSize, tileSize, tileSize);
-                }else{
-                    spriteBatch.draw(tilesTextures.get(0), x * tileSize, y * tileSize, tileSize, tileSize);
-                }
-                
-            }
-        }
-    
-  
     }
     
-
     public void disposeTextures(){
         for(Texture t:tilesTextures){
             t.dispose();
