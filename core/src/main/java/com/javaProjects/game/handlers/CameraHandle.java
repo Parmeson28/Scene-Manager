@@ -1,8 +1,7 @@
-package com.javaProjects.game;
+package com.javaProjects.game.handlers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -14,43 +13,32 @@ public class CameraHandle {
     public int cameraW = 1920, cameraH = 1080;
     public int cameraSpd = 5;
 
-    Viewport viewport;
+    public Viewport viewport;
 
     //Put this inside Create()
-    public void cameraConfig(){ 
+    public void cameraConfig(){
 
-        camera = new OrthographicCamera();  
+        camera = new OrthographicCamera();
 
         viewport = new FitViewport(cameraW, cameraH, camera);
+    }
 
-        camera.position.set(cameraW/2f, cameraH/2f, 0f);
+    public void centerOn(float worldW, float worldH) {
+        camera.position.set(worldW / 2f, worldH / 2f, 0f);
         camera.update();
     }
 
-    //Put this inside Render()
     public void cameraMovement(SpriteBatch spriteBatch){
 
         spriteBatch.setProjectionMatrix(camera.combined);
-    
+
         //Camera Movement
         if(Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += cameraSpd;
         if(Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= cameraSpd;
         if(Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= cameraSpd;
         if(Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += cameraSpd;
-    
-        //Limiting the camera movement
-        if(camera.position.y + (cameraH * 1.15) > cameraH) camera.position.y = camera.position.y - cameraSpd;
-    
-        if(camera.position.y + (cameraH/2) < 0) camera.position.y = camera.position.y + cameraSpd;
-    
-        if(camera.position.x + (cameraW * 1.15) > cameraW)  camera.position.x = camera.position.x - cameraSpd;
-        
-        if(camera.position.x - (cameraW * 0.47) < -cameraW) camera.position.x = camera.position.x + cameraSpd;
-    
-        
+
         camera.update();
     }
 
-    
-    
 }

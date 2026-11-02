@@ -13,13 +13,12 @@ import com.badlogic.gdx.utils.Array;
 
 public class TileGrid {
 
-    private final CameraHandle camera = new CameraHandle();
+    public final int tileSize = 32;
 
+    // Definidos pelo usuário na tela inicial (setGridSize)
+    private int gridWidth = 32;
+    private int gridHeight = 32;
 
-    public  final int tileSize = 32;
-    private final int gridWidth = 32;
-    private final int gridHeight = 32;
- 
     private Array<Texture> tilesTextures = new Array<>();
 
     private BufferedReader br;
@@ -29,7 +28,7 @@ public class TileGrid {
 
     private HashMap<Vector2, Integer> placedTiles = new HashMap<>();
     private final Vector2 tmp = new Vector2();
-    
+
     public void takeTileTextures(){
         try {
 
@@ -45,7 +44,7 @@ public class TileGrid {
                     Texture t = new Texture("assets/" + line);
                     tilesTextures.add(t);
                 }
-                
+
                 line = br.readLine();
             }
 
@@ -55,6 +54,21 @@ public class TileGrid {
         }
     }
 
+    /** Define o tamanho do mapa em tiles e limpa os tiles já colocados. */
+    public void setGridSize(int width, int height) {
+        gridWidth = width;
+        gridHeight = height;
+        placedTiles.clear();
+    }
+
+    public float getWorldWidth() {
+        return gridWidth * tileSize;
+    }
+
+    public float getWorldHeight() {
+        return gridHeight * tileSize;
+    }
+
     private Vector2 snap(Vector2 world){
         return new Vector2(
             MathUtils.floor(world.x / tileSize) * tileSize,
@@ -62,8 +76,16 @@ public class TileGrid {
         );
     }
 
+    private boolean insideGrid(Vector2 snapped) {
+        return snapped.x >= 0 && snapped.x < gridWidth * tileSize
+            && snapped.y >= 0 && snapped.y < gridHeight * tileSize;
+    }
+
     public void placeTile(Vector2 world, int textureIndex){
-        placedTiles.put(snap(world), textureIndex);
+        Vector2 s = snap(world);
+        if (insideGrid(s)) {
+            placedTiles.put(s, textureIndex);
+        }
     }
 
     public void removeTile(Vector2 world) {
@@ -71,8 +93,8 @@ public class TileGrid {
     }
 
     public void renderTiles(SpriteBatch spriteBatch) {
-        for (int x = -(camera.cameraW / tileSize); x < gridWidth; x++) {
-            for (int y = -(camera.cameraH / tileSize); y < gridHeight; y++) {
+        for (int x = 0; x < gridWidth; x++) {
+            for (int y = 0; y < gridHeight; y++) {
                 tmp.set(x * tileSize, y * tileSize);
                 Integer idx = placedTiles.get(tmp);
                 Texture t = tilesTextures.get(idx != null ? idx : 0);
@@ -80,7 +102,7 @@ public class TileGrid {
             }
         }
     }
-    
+
     public void disposeTextures(){
         for(Texture t:tilesTextures){
             t.dispose();
