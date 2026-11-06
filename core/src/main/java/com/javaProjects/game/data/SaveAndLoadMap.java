@@ -14,9 +14,15 @@ public class SaveAndLoadMap {
 
     }
 
-    public Map loadSave(){
-        
+    public void saveToExistingFile(){
+
+    }
+
+    public Map loadSave(String save){
+        savesPath = savesPath + save;
+
+
 
         return new Map();
     }
-}
+}   
