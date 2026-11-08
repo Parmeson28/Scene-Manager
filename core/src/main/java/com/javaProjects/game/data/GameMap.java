@@ -8,6 +8,7 @@ public class GameMap {
     public List<Structure> structures;
     public List<Waypoint> waypoints;
     public String texture;
+    public float sizeX, sizeZ;
 
     public GameMap(){
         this.structures = new ArrayList<>();
@@ -59,5 +60,19 @@ public class GameMap {
     }
     public List<Waypoint> getWaypoints() {
         return waypoints;
+    }
+
+    public float getSizeX() {
+        return sizeX;
+    }
+    public void setSizeX(float sizeX) {
+        this.sizeX = sizeX;
+    }
+
+    public float getSizeZ() {
+        return sizeZ;
+    }
+    public void setSizeZ(float sizeZ) {
+        this.sizeZ = sizeZ;
     }
 }

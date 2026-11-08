@@ -12,10 +12,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.javaProjects.game.data.GameMap;
 import com.javaProjects.game.data.SaveAndLoadMap;
 import com.javaProjects.game.data.Structure;
-import com.javaProjects.game.data.Waypoint;
 import com.javaProjects.game.handlers.CameraHandle;
 import com.javaProjects.game.handlers.InputHandler;
 import com.javaProjects.game.ui.EditorUi;
@@ -91,12 +89,7 @@ public class Manager extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Fullscreen
-        if(Gdx.input.isKeyJustPressed(Input.Keys.B)){
-            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-        }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            Gdx.graphics.setWindowedMode(camera.cameraW, camera.cameraH);
-        }
+        inputHandler.fullScreenMode(camera);
 
         if (ui.isSetupDone()) {
             int st = inputHandler.selectTileSC(currentT);
@@ -120,14 +113,17 @@ public class Manager extends ApplicationAdapter {
             camera.viewport.unproject(p);
             tileGrid.placeTile(p, tileTexture);
         }
-        if (!overUI && Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             Vector2 p = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-            camera.viewport.unproject(p);
-            tileGrid.removeTile(p);
+            ui.showContextMenu(p.x, p.y, p, new Array<String>(), new Array<String>());
         }
 
         ui.render();
 
+    }
+    
+    public Structure createNewStructure(String type, String name, String model, float x, float z){
+        return new Structure(type, name, model, x, z);
     }
 
     @Override

@@ -8,6 +8,14 @@ public class Structure {
 
     }
 
+    public Structure(String type, String name, String model, float x, float z){
+        this.type = type;
+        this.name = name;
+        this.model = model;
+        this.x = x;
+        this.z = z;
+    }
+
     public String getType() {
         return type;
     }

@@ -22,7 +22,11 @@ public class SaveAndLoadMap {
         
         String text = 
         "{\n" +
-            "\tgroundTexture:\" \",\n" +
+            "\t\"groundTexture:\",\n" +
+
+            "\t\"sizeX:\" 0" +
+            
+            "\t\"sizeZ:\" 0" +
 
             "\t\"structures\":[\n" +
             "\t],\n"+

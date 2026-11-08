@@ -1,6 +1,7 @@
 package com.javaProjects.game.handlers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 
 public class InputHandler {
@@ -20,4 +21,16 @@ public class InputHandler {
         return v;
     }
     
+    public void fullScreenMode(CameraHandle camera){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.B)){
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            Gdx.graphics.setWindowedMode(camera.cameraW, camera.cameraH);
+        }
+    }
+
+    public void rightClickOptions(){
+        
+    }
 }
