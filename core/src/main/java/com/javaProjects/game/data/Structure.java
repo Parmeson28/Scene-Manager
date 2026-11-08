@@ -1,7 +1,7 @@
 package com.javaProjects.game.data;
 
 public class Structure {
-    public String type, name;
+    public String type, name, model;
     public float x, z;
 
     public Structure(){
@@ -38,5 +38,13 @@ public class Structure {
 
     public void setZ(float z) {
         this.z = z;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
     }
 }

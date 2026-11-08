@@ -3,21 +3,20 @@ package com.javaProjects.game.data;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Map {
+public class GameMap {
 
     public List<Structure> structures;
     public List<Waypoint> waypoints;
-    public List<GroundTexture> textures;
+    public String texture;
 
-    public Map(){
+    public GameMap(){
         this.structures = new ArrayList<>();
         this.waypoints = new ArrayList<>();
-        this.textures = new ArrayList<>();
     }
-    public Map(List<Structure> s, List<Waypoint> w, List<GroundTexture> g){
+    public GameMap(List<Structure> s, List<Waypoint> w, String g){
         this.structures = s;
         this.waypoints = w;
-        this.textures = g;
+        this.texture = g;
     }
 
     public void saveStructures(List<Structure> s){
@@ -28,7 +27,10 @@ public class Map {
     }
 
     public Structure loadStructures(){
-        return new Structure();
+        for(Structure s : structures){
+            return s;
+        }
+        return null;
     }
 
     public void saveWaypoints(List<Waypoint> w){
@@ -39,17 +41,23 @@ public class Map {
     }
 
     public Waypoint loadWaypoints(){
-        return new Waypoint();
+        for (Waypoint w : waypoints) {
+            return w;
+        }
+        return null;
     }
 
-    public void saveTextures(List<GroundTexture> g){
-        this.textures = g;
+    public String getTexture() {
+        return texture;
     }
-    public void saveTextures(GroundTexture g){
-        this.textures.add(g);
-    } 
+    public void setTexture(String texture) {
+        this.texture = texture;
+    }
 
-    public GroundTexture loadTextures(){
-        return new GroundTexture();
+    public List<Structure> getStructures() {
+        return structures;
+    }
+    public List<Waypoint> getWaypoints() {
+        return waypoints;
     }
 }

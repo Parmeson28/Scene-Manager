@@ -12,6 +12,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.javaProjects.game.data.GameMap;
+import com.javaProjects.game.data.SaveAndLoadMap;
+import com.javaProjects.game.data.Structure;
+import com.javaProjects.game.data.Waypoint;
 import com.javaProjects.game.handlers.CameraHandle;
 import com.javaProjects.game.handlers.InputHandler;
 import com.javaProjects.game.ui.EditorUi;
@@ -53,9 +57,11 @@ public class Manager extends ApplicationAdapter {
     //UI
     private EditorUi ui;
 
+    //Save system
+    SaveAndLoadMap saveAndLoad = new SaveAndLoadMap();
+
     @Override
     public void create() {
-
         camera.cameraConfig();
 
         tileGrid.takeTileTextures();
