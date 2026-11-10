@@ -2,23 +2,26 @@ package com.javaProjects.game.handlers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class CameraHandle {
+public class CameraHandle{
 
     public OrthographicCamera camera;
     public int cameraW = 1920, cameraH = 1080;
-    public int cameraSpd = 5;
+    public float cameraSpd;
 
     public Viewport viewport;
 
-    //Put this inside Create()
     public void cameraConfig(){
 
         camera = new OrthographicCamera();
+
+        
+        cameraSpd = 5f * camera.zoom;
 
         viewport = new FitViewport(cameraW, cameraH, camera);
     }
@@ -39,6 +42,16 @@ public class CameraHandle {
         if(Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += cameraSpd;
 
         camera.update();
+    }
+
+    public void zoom(){
+        System.out.println(camera.zoom);
+        if(Gdx.input.isKeyPressed(Keys.NUM_9) && camera.zoom > 0.1){
+			camera.zoom -= .05f;
+		}
+        if(Gdx.input.isKeyPressed(Keys.NUM_0)){
+			camera.zoom += .05f;
+		}
     }
 
 }

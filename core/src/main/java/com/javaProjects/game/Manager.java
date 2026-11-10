@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -38,7 +37,8 @@ public class Manager extends ApplicationAdapter {
 
     private Array<Texture> textures;
 
-    private SpriteBatch spriteBatch;
+    private SpriteBatch tilesSpriteBatch;
+    private SpriteBatch objectsSpriteBatch;
 
     private int tileTexture;
 
@@ -54,6 +54,7 @@ public class Manager extends ApplicationAdapter {
 
     //UI
     private EditorUi ui;
+    private boolean gridReady = false;
 
     //Save system
     SaveAndLoadMap saveAndLoad = new SaveAndLoadMap();
@@ -64,62 +65,64 @@ public class Manager extends ApplicationAdapter {
 
         tileGrid.takeTileTextures();
 
-        spriteBatch = new SpriteBatch();
+        tilesSpriteBatch = new SpriteBatch();
+        objectsSpriteBatch = new SpriteBatch();
 
         currentT = 1;
         tileTexture = currentT;
 
-        ui = new EditorUi(
-            id -> tileTexture = id,
-            (w, h) -> {
-                tileGrid.setGridSize(w, h);
-                camera.centerOn(tileGrid.getWorldWidth(), tileGrid.getWorldHeight());
-            }
-        );
-        ui.bindInput();
-
+        ui = new EditorUi();
+        ui.setupScreen(); 
+        
     }
 
     @Override
     public void render() {
+  
+        camera.zoom();
 
-        camera.cameraMovement(spriteBatch);
+        if (ui.isSetupDone() && !gridReady) {
+            tileGrid.setGridSize(ui.getWidth(), ui.getHeight());
+            gridReady = true;
+        }
+        
+        camera.cameraMovement(objectsSpriteBatch);
+        
+        camera.cameraMovement(tilesSpriteBatch);
+
 
         Gdx.gl.glClearColor(0, 0, 0, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Fullscreen
         inputHandler.fullScreenMode(camera);
-
+        
         if (ui.isSetupDone()) {
             int st = inputHandler.selectTileSC(currentT);
             if (st != currentT) {
-                currentT = st;
-                ui.selectTile(st);
+                    currentT = st;
             }
         }
+        
+        if (ui.isSetupDone()) {
+            tilesSpriteBatch.begin();
+            tileGrid.renderTiles(tilesSpriteBatch, 0);
+            tilesSpriteBatch.end();
+
+            objectsSpriteBatch.begin();
+            tileGrid.renderObjects(objectsSpriteBatch);
+            objectsSpriteBatch.end();
+        }
+
+        // No editing while the setup window is open or while the mouse is over the UI
+        boolean overUI = !ui.isSetupDone() || ui.isPointerOverUI();
 
         if (ui.isSetupDone()) {
-            spriteBatch.begin();
-            tileGrid.renderTiles(spriteBatch);
-            spriteBatch.end();
+            inputHandler.rightClickOptions(camera, ui, tileGrid);
         }
+        inputHandler.placeTiles(camera, tileGrid, tileTexture, overUI);
 
-        //Handling mouse clicks (ignored when the pointer is over the UI / during setup)
-        boolean overUI = ui.isPointerOverUI();
-
-        if (!overUI && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            Vector2 p = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-            camera.viewport.unproject(p);
-            tileGrid.placeTile(p, tileTexture);
-        }
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
-            Vector2 p = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-            ui.showContextMenu(p.x, p.y, p, new Array<String>(), new Array<String>());
-        }
-
-        ui.render();
-
+        ui.drawUi();
     }
     
     public Structure createNewStructure(String type, String name, String model, float x, float z){
@@ -136,7 +139,7 @@ public class Manager extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        spriteBatch.dispose();
+        tilesSpriteBatch.dispose();
 
         tileGrid.disposeTextures();
 
