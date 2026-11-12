@@ -45,7 +45,6 @@ public class CameraHandle{
     }
 
     public void zoom(){
-        System.out.println(camera.zoom);
         if(Gdx.input.isKeyPressed(Keys.NUM_9) && camera.zoom > 0.1){
 			camera.zoom -= .05f;
 		}

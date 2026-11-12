@@ -56,11 +56,39 @@ public class EditorUi extends UiManager{
         addRow(objectMenu, createButton("Waypoint", () -> pickObject("waypoint")));
     }
 
+    
+    /** Opens a small form with one text field per hint. Calls onConfirm with the typed values. */
+    public void openForm(String title, String[] hints, Consumer<String[]> onConfirm){
+        Window form = createWindow(title);
+
+        TextField[] fields = new TextField[hints.length];
+        for (int i = 0; i < hints.length; i++) {
+            fields[i] = createTextField(hints[i]);
+            addRow(form, fields[i]);
+        }
+
+        addRow(form, createButton("Confirm", () -> {
+            String[] values = new String[fields.length];
+            for (int i = 0; i < fields.length; i++) {
+                values[i] = fields[i].getText().trim();
+            }
+            if (values[0].isEmpty()) return;   // first field (name) is required
+
+            form.remove();                      // removes it from the stage
+            onConfirm.accept(values);
+        }));
+        addRow(form, createButton("Cancel", form::remove));
+
+        showWindowAtCursor(form);
+        stage.setKeyboardFocus(fields[0]);
+    }
+
     public void openObjectMenu(Consumer<String> onPick){
         if (!isSetupDone) return;
 
         pendingPick = onPick;
         showWindowAtCursor(objectMenu);
+        
     }
 
     private void pickObject(String type){

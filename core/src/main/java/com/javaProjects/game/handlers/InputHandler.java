@@ -42,10 +42,12 @@ public class InputHandler {
             ui.openObjectMenu(type -> {
                 switch(type){
                     case "structure":
-                        tileGrid.placeObjectTile(p, 0);
+                        ui.openForm("Structure info", new String[]{"name", "model"},
+                            v -> tileGrid.placeObjectTile(p, 0));
                         break;
                     case "waypoint":
-                        tileGrid.placeObjectTile(p, 1);
+                        ui.openForm("Waypoint info", new String[]{"waypoint name"},
+                            v -> tileGrid.placeObjectTile(p, 1));
                         break;
                 }
             });
@@ -54,13 +56,6 @@ public class InputHandler {
 
     public void placeTiles(CameraHandle camera, TileGrid tileGrid, int tileTexture, boolean overUI){
         if (!overUI && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            Vector2 p = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-            camera.viewport.unproject(p);
-            tileGrid.placeTile(p, tileTexture);
-        }
-    }
-    public void placeTiles(CameraHandle camera, TileGrid tileGrid, int tileTexture){
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             Vector2 p = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             camera.viewport.unproject(p);
             tileGrid.placeTile(p, tileTexture);
