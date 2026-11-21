@@ -1,5 +1,8 @@
 package com.javaProjects.game.handlers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
@@ -39,16 +42,19 @@ public class InputHandler {
             Vector2 p = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             camera.viewport.unproject(p);
 
+            List<String> objectAttributes = new ArrayList<>();
+
             ui.openObjectMenu(type -> {
-                switch(type){
-                    case "structure":
-                        ui.openForm("Structure info", new String[]{"name", "model"},
-                            v -> tileGrid.placeObjectTile(p, 0));
-                        break;
-                    case "waypoint":
-                        ui.openForm("Waypoint info", new String[]{"waypoint name"},
-                            v -> tileGrid.placeObjectTile(p, 1));
-                        break;
+                if (type.equals("structure")) {
+                    ui.openForm("Structure", new String[]{"Name", "Width", "Height"}, values -> {
+                        //Create Structure
+                        
+                    });
+                } else if (type.equals("waypoint")) {
+                    ui.openForm("Waypoint", new String[]{"Name"}, values -> {
+                        //Create Waypoint
+                        
+                    });
                 }
             });
         }

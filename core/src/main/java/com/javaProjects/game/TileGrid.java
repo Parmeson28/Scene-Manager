@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.javaProjects.game.data.GenericObject;
+import com.javaProjects.game.data.Structure;
+import com.javaProjects.game.data.Waypoint;
 
 public class TileGrid {
 
@@ -23,14 +26,13 @@ public class TileGrid {
     private Array<Texture> objectTilesTextures = new Array<>();
     private Array<Texture> tilesTextures = new Array<>();
 
-
     private BufferedReader br;
 
     private String folder;
     private String[] selection;
 
     private HashMap<Vector2, Integer> placedTiles = new HashMap<>();
-    private HashMap<Vector2, Integer> placedObjects = new HashMap<>();
+    private HashMap<GenericObject, Integer> placedObjects = new HashMap<>();
     private final Vector2 tmp = new Vector2();
 
     public void takeTileTextures(){
@@ -99,10 +101,17 @@ public class TileGrid {
         }
     }
 
-    public void placeObjectTile(Vector2 world, int textureIndex){
+    public void placeObjectTile(Structure structure, Vector2 world, int textureIndex){
         Vector2 s = snap(world);
         if (insideGrid(s)) {
-            placedObjects.put(s, textureIndex);
+            placedObjects.put(structure, textureIndex);
+        }
+    }
+
+    public void placeObjectTile(Waypoint waypoint, Vector2 world, int textureIndex){
+        Vector2 s = snap(world);
+        if (insideGrid(s)) {
+            placedObjects.put(waypoint, textureIndex);
         }
     }
 

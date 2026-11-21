@@ -1,5 +1,7 @@
 package com.javaProjects.game.ui;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -58,7 +60,7 @@ public class EditorUi extends UiManager{
 
     
     /** Opens a small form with one text field per hint. Calls onConfirm with the typed values. */
-    public void openForm(String title, String[] hints, Consumer<String[]> onConfirm){
+    public void openForm(String title, String[] hints, Consumer<List<String>> onConfirm){
         Window form = createWindow(title);
 
         TextField[] fields = new TextField[hints.length];
@@ -68,13 +70,12 @@ public class EditorUi extends UiManager{
         }
 
         addRow(form, createButton("Confirm", () -> {
-            String[] values = new String[fields.length];
-            for (int i = 0; i < fields.length; i++) {
-                values[i] = fields[i].getText().trim();
-            }
-            if (values[0].isEmpty()) return;   // first field (name) is required
+            List<String> values = new ArrayList<>();
+            for (TextField f : fields) values.add(f.getText().trim());
 
-            form.remove();                      // removes it from the stage
+            if (values.get(0).isEmpty()) return; // name is required
+
+            form.remove();
             onConfirm.accept(values);
         }));
         addRow(form, createButton("Cancel", form::remove));
@@ -88,7 +89,6 @@ public class EditorUi extends UiManager{
 
         pendingPick = onPick;
         showWindowAtCursor(objectMenu);
-        
     }
 
     private void pickObject(String type){
