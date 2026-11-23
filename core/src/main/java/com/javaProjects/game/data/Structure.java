@@ -22,41 +22,16 @@ public class Structure extends GenericObject{
         this.z = z;
     }
 
+    public Structure(String name, String type) {
+        this.name = name;
+        this.type = type;
+    }
+
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    @Override 
-    public String getName() {
-        return name;
-    }
-
-    @Override 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override 
-    public float getX() {
-        return x;
-    }
-
-    @Override 
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    @Override 
-    public float getZ() {
-        return z;
-    }
-
-    @Override 
-    public void setZ(float z) {
-        this.z = z;
     }
 }

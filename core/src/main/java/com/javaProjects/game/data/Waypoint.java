@@ -14,33 +14,8 @@ public class Waypoint extends GenericObject{
         this.z = z;
     }
 
-    @Override 
-    public String getName() {
-        return name;
-    }
-
-    @Override 
-    public void setName(String name) {
+    public Waypoint(String name) {
         this.name = name;
     }
 
-    @Override 
-    public float getX() {
-        return x;
-    }
-
-    @Override 
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    @Override 
-    public float getZ() {
-        return z;
-    }
-
-    @Override 
-    public void setZ(float z) {
-        this.z = z;
-    }
 }

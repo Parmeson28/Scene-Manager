@@ -60,8 +60,10 @@ public class EditorUi extends UiManager{
 
     
     /** Opens a small form with one text field per hint. Calls onConfirm with the typed values. */
-    public void openForm(String title, String[] hints, Consumer<List<String>> onConfirm){
+    public List<String> openForm(String title, String[] hints, Consumer<List<String>> onConfirm){
         Window form = createWindow(title);
+        
+        List<String> values = new ArrayList<>();
 
         TextField[] fields = new TextField[hints.length];
         for (int i = 0; i < hints.length; i++) {
@@ -70,10 +72,9 @@ public class EditorUi extends UiManager{
         }
 
         addRow(form, createButton("Confirm", () -> {
-            List<String> values = new ArrayList<>();
             for (TextField f : fields) values.add(f.getText().trim());
 
-            if (values.get(0).isEmpty()) return; // name is required
+            if (values.get(0).isEmpty()) return; 
 
             form.remove();
             onConfirm.accept(values);
@@ -82,6 +83,7 @@ public class EditorUi extends UiManager{
 
         showWindowAtCursor(form);
         stage.setKeyboardFocus(fields[0]);
+        return values;
     }
 
     public void openObjectMenu(Consumer<String> onPick){
