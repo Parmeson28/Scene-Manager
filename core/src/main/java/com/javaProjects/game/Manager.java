@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.javaProjects.game.data.SaveAndLoadMap;
+import com.javaProjects.game.data.GameMap;
 import com.javaProjects.game.data.Structure;
 import com.javaProjects.game.handlers.CameraHandle;
 import com.javaProjects.game.handlers.InputHandler;
@@ -57,7 +57,7 @@ public class Manager extends ApplicationAdapter {
     private boolean gridReady = false;
 
     //Save system
-    SaveAndLoadMap saveAndLoad = new SaveAndLoadMap();
+    GameMap map;
 
     @Override
     public void create() {
@@ -73,7 +73,8 @@ public class Manager extends ApplicationAdapter {
 
         ui = new EditorUi();
         ui.setupScreen(); 
-        
+
+        map = new GameMap();
     }
 
     @Override
@@ -118,9 +119,13 @@ public class Manager extends ApplicationAdapter {
         boolean overUI = !ui.isSetupDone() || ui.isPointerOverUI();
 
         if (ui.isSetupDone()) {
-            inputHandler.rightClickOptions(camera, ui, tileGrid);
+            inputHandler.rightClickOptions(camera, ui, tileGrid, map);
         }
         inputHandler.placeTiles(camera, tileGrid, tileTexture, overUI);
+
+
+        //Save system (in progress)
+        inputHandler.saveMap();
 
         ui.drawUi();
     }

@@ -47,9 +47,7 @@ public class SaveAndLoadMap {
 
     public GameMap loadSave(String save){
         String saveFile = savesPath + save;
-
-
-
+        
         return new GameMap();
     }
 }   
