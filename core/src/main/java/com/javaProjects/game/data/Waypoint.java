@@ -2,7 +2,6 @@ package com.javaProjects.game.data;
 
 public class Waypoint extends GenericObject{
     public String name;
-    public float x, z;
 
     public Waypoint(){
 

@@ -11,8 +11,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.javaProjects.game.data.GenericObject;
-import com.javaProjects.game.data.Structure;
-import com.javaProjects.game.data.Waypoint;
 
 public class TileGrid {
 
@@ -101,17 +99,10 @@ public class TileGrid {
         }
     }
 
-    public void placeObjectTile(Structure structure, Vector2 world, int textureIndex){
+    public void placeObjectTile(GenericObject object, Vector2 world, int textureIndex){
         Vector2 s = snap(world);
         if (insideGrid(s)) {
-            placedObjects.put(structure, textureIndex);
-        }
-    }
-
-    public void placeObjectTile(Waypoint waypoint, Vector2 world, int textureIndex){
-        Vector2 s = snap(world);
-        if (insideGrid(s)) {
-            placedObjects.put(waypoint, textureIndex);
+            placedObjects.put(object, textureIndex);
         }
     }
 
@@ -131,16 +122,12 @@ public class TileGrid {
     }
 
     public void renderObjects(SpriteBatch spriteBatch){
-        for (int x = 0; x < gridWidth; x++) {
-            for (int y = 0; y < gridHeight; y++) {
-                tmp.set(x * tileSize, y * tileSize);
-                Integer idx = placedObjects.get(tmp);
-                
-                if(idx != null){
-                    Texture t = objectTilesTextures.get(idx);
-                    spriteBatch.draw(t, x * tileSize, y * tileSize, tileSize, tileSize);
-                }
-            }
+        for (java.util.Map.Entry<GenericObject, Integer> entry : placedObjects.entrySet()) {
+            GenericObject obj = entry.getKey();
+            int idx = entry.getValue();
+            Texture t = objectTilesTextures.get(idx);
+            Vector2 s = snap(new Vector2(obj.getX(), obj.getZ()));
+            spriteBatch.draw(t, s.x, s.y, tileSize, tileSize);
         }
     }
 

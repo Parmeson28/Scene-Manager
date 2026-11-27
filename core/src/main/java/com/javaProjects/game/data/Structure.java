@@ -2,7 +2,6 @@ package com.javaProjects.game.data;
 
 public class Structure extends GenericObject{
     public String type, name;
-    public float x, z;
 
     public Structure(){
 

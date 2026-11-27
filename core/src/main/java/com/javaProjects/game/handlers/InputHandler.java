@@ -41,20 +41,15 @@ public class InputHandler {
             Vector2 p = new Vector2(Gdx.input.getX(), Gdx.input.getY());
             camera.viewport.unproject(p);
 
-            
-
             ui.openObjectMenu(type -> {
                 if (type.equals("structure")) {
             
                     ui.openForm("Structure", new String[]{"Name", "Width", "Height"}, values -> {
                         String name = values.get(0);
                         
-                        tileGrid.placeObjectTile(new Structure("structure", name, p.x, p.y), p, 1);
+                        tileGrid.placeObjectTile(new Structure("structure", name, p.x, p.y), p, 0);
                         
                     });
-
-                    System.out.println("Created new Structure");
-
                 } else if (type.equals("waypoint")) {
                     ui.openForm("Waypoint", new String[]{"Name"}, values -> {
                         
@@ -63,9 +58,6 @@ public class InputHandler {
                         tileGrid.placeObjectTile(new Waypoint(name, p.x, p.y), p, 1);
 
                     });
-                    
-                    System.out.println("Created new Waypoint");
-
                 }
             });
         }
