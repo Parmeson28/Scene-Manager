@@ -12,7 +12,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.javaProjects.game.data.GameMap;
+import com.javaProjects.game.data.SaveAndLoadMap;
 import com.javaProjects.game.data.Structure;
+import com.javaProjects.game.data.Waypoint;
 import com.javaProjects.game.handlers.CameraHandle;
 import com.javaProjects.game.handlers.InputHandler;
 import com.javaProjects.game.ui.EditorUi;
@@ -72,7 +74,7 @@ public class Manager extends ApplicationAdapter {
         tileTexture = currentT;
 
         ui = new EditorUi();
-        ui.setupScreen(); 
+        ui.mainMenu(); 
 
         map = new GameMap();
     }
@@ -82,10 +84,23 @@ public class Manager extends ApplicationAdapter {
   
         camera.zoom();
 
-        if (ui.isSetupDone() && !gridReady) {
-            tileGrid.setGridSize(ui.getWidth(), ui.getHeight());
-            gridReady = true;
+    if (ui.isSetupDone() && !gridReady) {
+        if (ui.getLoadedFileName() != null) {
+            SaveAndLoadMap saveLoad = new SaveAndLoadMap();
+            map = saveLoad.loadSave(ui.getLoadedFileName());
+            tileGrid.setGridSize((int) map.getSizeX(), (int) map.getSizeZ());
+
+        for (Structure s : map.getStructures()) {
+            tileGrid.placeObjectTile(s, new Vector2(s.getX(), s.getZ()), 0);
         }
+        for (Waypoint w : map.getWaypoints()) {
+            tileGrid.placeObjectTile(w, new Vector2(w.getX(), w.getZ()), 1);
+        }
+        } else {
+            tileGrid.setGridSize(ui.getWidth(), ui.getHeight());
+        }
+        gridReady = true;
+    }
         
         camera.cameraMovement(objectsSpriteBatch);
         

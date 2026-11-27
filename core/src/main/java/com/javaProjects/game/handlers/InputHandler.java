@@ -6,11 +6,14 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 import com.javaProjects.game.TileGrid;
 import com.javaProjects.game.data.GameMap;
+import com.javaProjects.game.data.SaveAndLoadMap;
 import com.javaProjects.game.data.Structure;
 import com.javaProjects.game.data.Waypoint;
 import com.javaProjects.game.ui.EditorUi;
 
 public class InputHandler {
+    
+    SaveAndLoadMap saveLoad = new SaveAndLoadMap();
     
     public void InputHandler(){
 
@@ -74,6 +77,7 @@ public class InputHandler {
 
     public void saveMap(){
         if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.S)){
+            
             System.out.println("Saving game");
         }
     }
